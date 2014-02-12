@@ -7,22 +7,34 @@
 
 var http = require('http'),
     wpi = require('wiring-pi'),
+    Parse = require('parse').Parse,
     BASE = 123,
     CHANNEL = 0,
     value;
 
+Parse.initialize("GabAeJSBADI5LJzFSdTzBX7Ru4Ns2Kq2UMhtXaI8", "xwaDV6YKCz2oKfV6tw1jKeceTSXRbLH0mfgY2nP9");
+
 wpi.mcp3004Setup(BASE, CHANNEL);
 wpi.setup('sys');
 
-http.createServer(function(req,resp) {
-    resp.writeHead(200, {"Content-Type": "text/plain"});
+http.createServer(function(req, resp) {
+    resp.writeHead(200, {
+        "Content-Type": "text/plain"
+    });
     resp.write("Check the console bro..");
-	resp.end();
+    resp.end();
 }).listen(8000);
 
 setInterval(function() {
-   	value = wpi.analogRead(BASE);
-    console.log("value: "+ value);		
+    value = wpi.analogRead(BASE);
+    console.log("value: " + value);
 }, 500);
-    
 
+function recordActivity(file) {
+    var Activity = Parse.Object.extend("Activity"),
+        activity = new Activity();
+    activity.set("enteredAt", new Date());
+    activity.set("file", null);
+    activity.set("value", value);    
+    activity.save();
+}

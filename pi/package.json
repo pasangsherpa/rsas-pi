@@ -8,7 +8,8 @@
     },
     "dependencies": {
         "express": "3.x",
-        "wiring-pi":"1.x"
+        "wiring-pi":"1.x",
+	"parse": "1.2.x"
     },
     "engines": {
         "node": "0.10.x",
