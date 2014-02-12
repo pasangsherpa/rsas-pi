@@ -11,7 +11,7 @@ var http = require('http'),
     startStopDaemon = require('start-stop-daemon'),
     BASE = 123,
     CHANNEL = 0,
-    value;
+    value, wait;
 
 startStopDaemon (function(){
 	Parse.initialize("GabAeJSBADI5LJzFSdTzBX7Ru4Ns2Kq2UMhtXaI8", "xwaDV6YKCz2oKfV6tw1jKeceTSXRbLH0mfgY2nP9");
@@ -29,19 +29,26 @@ startStopDaemon (function(){
 
 	setInterval(function() {
     	value = wpi.analogRead(BASE);
-		if (value > 90) {
+		if (!wait && value > 90) {
 			recordActivity(null, function(){});
     	}
-    	//console.log("value: " + value);
+    	console.log("value: " + value);
 	}, 500);
-
+	
 	function recordActivity(file, callback) {
     	var Activity = Parse.Object.extend("Activity"),
-        	activity = new Activity();
-		    activity.set("enteredAt", new Date());
+        	activity = new Activity(), now = new Date();
+   			wait = true;
+		    activity.set("enteredAt", now.toLocaleString());
 		    activity.set("file", null);
 		    activity.set("value", value);    
-    	activity.save();
+    	activity.save(null, {
+    		success: function() {
+    			setTimeout(function(){
+    				wait = false;
+    			}, 5000)
+    		}
+    	});
     	callback();
 	}
 
