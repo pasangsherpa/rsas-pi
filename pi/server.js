@@ -14,36 +14,36 @@ var http = require('http'),
     value;
 
 startStopDaemon (function(){
-Parse.initialize("GabAeJSBADI5LJzFSdTzBX7Ru4Ns2Kq2UMhtXaI8", "xwaDV6YKCz2oKfV6tw1jKeceTSXRbLH0mfgY2nP9");
+	Parse.initialize("GabAeJSBADI5LJzFSdTzBX7Ru4Ns2Kq2UMhtXaI8", "xwaDV6YKCz2oKfV6tw1jKeceTSXRbLH0mfgY2nP9");
 
-wpi.mcp3004Setup(BASE, CHANNEL);
-wpi.setup('sys');
+	wpi.mcp3004Setup(BASE, CHANNEL);
+	wpi.setup('sys');
 
-http.createServer(function(req, resp) {
-    resp.writeHead(200, {
-        "Content-Type": "text/plain"
-    });
-	recordActivity(null, function(){
-		console.log("activity saved..");
-	});
-    resp.write("Check the console bro..");
-    resp.end();
-}).listen(8000);
+	http.createServer(function(req, resp) {
+    	resp.writeHead(200, {
+        	"Content-Type": "text/plain"
+	    });
+    	resp.write("Check the console bro..");
+	    resp.end();
+	}).listen(8000);
 
-setInterval(function() {
-    value = wpi.analogRead(BASE);
-    // console.log("value: " + value);
-}, 500);
+	setInterval(function() {
+    	value = wpi.analogRead(BASE);
+		if (value > 90) {
+			recordActivity(null, function(){});
+    	}
+    	//console.log("value: " + value);
+	}, 500);
 
-function recordActivity(file, callback) {
-    var Activity = Parse.Object.extend("Activity"),
-        activity = new Activity();
-    activity.set("enteredAt", new Date());
-    activity.set("file", null);
-    activity.set("value", value);    
-    activity.save();
-    callback();
-}
+	function recordActivity(file, callback) {
+    	var Activity = Parse.Object.extend("Activity"),
+        	activity = new Activity();
+		    activity.set("enteredAt", new Date());
+		    activity.set("file", null);
+		    activity.set("value", value);    
+    	activity.save();
+    	callback();
+	}
 
 }).on("stop", function(){
 	this.stdout.write('Stopping at ' + new Date() + '\n');
