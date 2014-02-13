@@ -40,6 +40,27 @@ startStopDaemon(function() {
 
     setInterval(function() {
         value = wpi.analogRead(BASE);
+    }, 2000);
+
+    camera.on("read", function(err, timestamp, filename) {
+        if (value > 200) {
+            var Activity = Parse.Object.extend("Activity"),
+                activity = new Activity(),
+                image, fileData, now = new Date();
+            filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
+            image = new Parse.File("image.jpg", filedata);
+            image.save().then(function(file) {
+                wait = true;
+                activity.set("enteredAt", now.toLocaleString());
+                activity.set("value", value);
+                activity.set("photo", file);
+                activity.save();
+            });
+        }
+    });
+    /*
+    setInterval(function() {
+        value = wpi.analogRead(BASE);
         if (!wait && value > 100) {
             camera.on("read", function(err, timestamp, path) {
                 console.log("image captured with path: " + path + " @ : " + timestamp);
@@ -56,30 +77,18 @@ startStopDaemon(function() {
     function recordActivity(path, callback) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
-            now = new Date(),
-            image, fileData;
-        filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync(path)), 0)
-        // fs.readFile(path, function(err, data) {
-        // base64data = base64Encode(path),
+            image, fileData, now = new Date();
+        filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
             wait = true;
             activity.set("enteredAt", now.toLocaleString());
-            activity.set("file", null);
-            activity.set("value", value);
+            activity.set("value", 10);
             activity.set("photo", file);
-            activity.save(null, {
-                success: function() {
-                    setTimeout(function() {
-                        wait = false;
-                    }, 5000)
-                }
-            });
-            callback();
+            activity.save();
         });
-        // });
     }
-
+    */
 }).on("stop", function() {
     this.stdout.write('Stopping at ' + new Date() + '\n');
 });
