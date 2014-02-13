@@ -29,7 +29,7 @@ startStopDaemon(function() {
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
 
-    camera.start();
+    //camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
             "Content-Type": "text/plain"
@@ -40,25 +40,29 @@ startStopDaemon(function() {
 
     setInterval(function() {
         value = wpi.analogRead(BASE);
-    }, 2000);
+    	//console.log(value)
 
-    camera.on("read", function(err, timestamp, filename) {
-        if (value > 200) {
+	
+    //camera.on("read", function(err, timestamp, filename) {
+        if (value > 500) {
+        	console.log("writing to parse")
             var Activity = Parse.Object.extend("Activity"),
                 activity = new Activity(),
                 image, fileData, now = new Date();
             filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
             image = new Parse.File("image.jpg", filedata);
             image.save().then(function(file) {
-                wait = true;
+                //wait = true;
                 activity.set("enteredAt", now.toLocaleString());
                 activity.set("value", value);
                 activity.set("photo", file);
                 activity.save();
             });
         }
-    });
-    /*
+    //});
+
+    }, 500);    
+	/*
     setInterval(function() {
         value = wpi.analogRead(BASE);
         if (!wait && value > 100) {
