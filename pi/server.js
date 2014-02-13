@@ -15,7 +15,7 @@ var http = require('http'),
     startStopDaemon = require('start-stop-daemon'),
     BASE = 123,
     CHANNEL = 0,
-    value, wait,
+    wait,
     camera = new RaspiCam({
         mode: "photo",
         output: "./photo/img.jpg",
@@ -29,7 +29,6 @@ startStopDaemon(function() {
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
 
-    //camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
             "Content-Type": "text/plain"
@@ -38,38 +37,38 @@ startStopDaemon(function() {
         resp.end();
     }).listen(8000);
 
-    setInterval(function() {
-        value = wpi.analogRead(BASE);
-    	//console.log(value)
+    // setInterval(function() {
+    //     var value = wpi.analogRead(BASE);
+    //     console.log(value)
+    //     camera.start();
+    // }, 500);
 
-	
-    //camera.on("read", function(err, timestamp, filename) {
+    // camera.on("read", function(err, timestamp, filename) {
+    //     if (value > 500) {
+    //         console.log("writing to parse")
+    //         var Activity = Parse.Object.extend("Activity"),
+    //             activity = new Activity(),
+    //             image, fileData, now = new Date();
+    //         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
+    //         image = new Parse.File("image.jpg", filedata);
+    //         image.save().then(function(file) {
+    //             activity.set("enteredAt", now.toLocaleString());
+    //             activity.set("value", value);
+    //             activity.set("photo", file);
+    //             activity.save();
+    //         });
+    //     }
+    // });
+
+
+    setInterval(function() {
+        var value = wpi.analogRead(BASE);
         if (value > 500) {
-        	console.log("writing to parse")
-            var Activity = Parse.Object.extend("Activity"),
-                activity = new Activity(),
-                image, fileData, now = new Date();
-            filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
-            image = new Parse.File("image.jpg", filedata);
-            image.save().then(function(file) {
-                //wait = true;
-                activity.set("enteredAt", now.toLocaleString());
-                activity.set("value", value);
-                activity.set("photo", file);
-                activity.save();
-            });
-        }
-    //});
-
-    }, 500);    
-	/*
-    setInterval(function() {
-        value = wpi.analogRead(BASE);
-        if (!wait && value > 100) {
-            camera.on("read", function(err, timestamp, path) {
-                console.log("image captured with path: " + path + " @ : " + timestamp);
-                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', function() {});
-            });
+            camera.start();
+            //camera.on("read", function(err, timestamp, path) {
+                //console.log("image captured with path: " + path + " @ : " + timestamp);
+                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {});
+            //});
         }
         console.log("value: " + value);
     }, 500);
@@ -78,21 +77,21 @@ startStopDaemon(function() {
         return util.format("data:%s;base64,%s", mime.lookup(path), fs.readFileSync(path).toString("base64"));
     }
 
-    function recordActivity(path, callback) {
+    function recordActivity(path, value, callback) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
             image, fileData, now = new Date();
         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
-            wait = true;
+            // wait = true;
             activity.set("enteredAt", now.toLocaleString());
-            activity.set("value", 10);
+            activity.set("value", value);
             activity.set("photo", file);
             activity.save();
         });
     }
-    */
+
 }).on("stop", function() {
     this.stdout.write('Stopping at ' + new Date() + '\n');
 });
