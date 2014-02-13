@@ -29,6 +29,7 @@ startStopDaemon(function() {
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
 
+    camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
             "Content-Type": "text/plain"
@@ -40,7 +41,6 @@ startStopDaemon(function() {
     setInterval(function() {
         value = wpi.analogRead(BASE);
         if (!wait && value > 100) {
-            camera.start();
             camera.on("read", function(err, timestamp, path) {
                 console.log("image captured with path: " + path + " @ : " + timestamp);
                 recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', function() {});
@@ -57,26 +57,27 @@ startStopDaemon(function() {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
             now = new Date(),
-            image, base64data;
-        fs.readFile(path, function(err, data) {
-            // base64data = base64Encode(path),
-            image = new Parse.File("image.jpg", data);
-            image.save().then(function(file) {
-                wait = true;
-                activity.set("enteredAt", now.toLocaleString());
-                activity.set("file", null);
-                activity.set("value", value);
-                activity.set("photo", file);
-                activity.save(null, {
-                    success: function() {
-                        setTimeout(function() {
-                            wait = false;
-                        }, 5000)
-                    }
-                });
-                callback();
+            image, fileData;
+        filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync(path)), 0)
+        // fs.readFile(path, function(err, data) {
+        // base64data = base64Encode(path),
+        image = new Parse.File("image.jpg", filedata);
+        image.save().then(function(file) {
+            wait = true;
+            activity.set("enteredAt", now.toLocaleString());
+            activity.set("file", null);
+            activity.set("value", value);
+            activity.set("photo", file);
+            activity.save(null, {
+                success: function() {
+                    setTimeout(function() {
+                        wait = false;
+                    }, 5000)
+                }
             });
+            callback();
         });
+        // });
     }
 
 }).on("stop", function() {
