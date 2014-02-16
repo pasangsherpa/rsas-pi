@@ -28,7 +28,7 @@ startStopDaemon(function() {
 
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
-
+	camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
             "Content-Type": "text/plain"
@@ -39,30 +39,35 @@ startStopDaemon(function() {
 
     setInterval(function() {
         var value = wpi.analogRead(BASE);
-        if (value > 500) {
-            camera.start();
-            //camera.on("read", function(err, timestamp, path) {
+        if (value > 500) {        
+           	//camera.on("read", function(err, timestamp, path) {
                 //console.log("image captured with path: " + path + " @ : " + timestamp);
-                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {});
+                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value);
             //});
         }
         console.log("value: " + value);
     }, 500);
-
-    function recordActivity(path, value, callback) {
+	
+    function recordActivity(path, value) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
             image, fileData, now = new Date();
         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
-            activity.set("date", now);
-            activity.set("enteredTime", now.toTimeString());
-            activity.set("enteredDate", now.toDateString());
+			console.log("saving activity to parse")
+            activity.set("enteredAt", now);
             activity.set("value", value);
             activity.set("photo", file);
             activity.set("photoUrl", file.url());
-            activity.save();
+            return activity;
+        }).then(function(activity){
+        	activity.save().then(function(obj){
+        		console.log("activity saved")
+        		return obj;
+        	});
+        }).then(function() {
+        	return 0;
         });
     }
 
