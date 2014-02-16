@@ -37,30 +37,6 @@ startStopDaemon(function() {
         resp.end();
     }).listen(8000);
 
-    // setInterval(function() {
-    //     var value = wpi.analogRead(BASE);
-    //     console.log(value)
-    //     camera.start();
-    // }, 500);
-
-    // camera.on("read", function(err, timestamp, filename) {
-    //     if (value > 500) {
-    //         console.log("writing to parse")
-    //         var Activity = Parse.Object.extend("Activity"),
-    //             activity = new Activity(),
-    //             image, fileData, now = new Date();
-    //         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
-    //         image = new Parse.File("image.jpg", filedata);
-    //         image.save().then(function(file) {
-    //             activity.set("enteredAt", now.toLocaleString());
-    //             activity.set("value", value);
-    //             activity.set("photo", file);
-    //             activity.save();
-    //         });
-    //     }
-    // });
-
-
     setInterval(function() {
         var value = wpi.analogRead(BASE);
         if (value > 500) {
@@ -73,10 +49,6 @@ startStopDaemon(function() {
         console.log("value: " + value);
     }, 500);
 
-    function base64Encode(path) {
-        return util.format("data:%s;base64,%s", mime.lookup(path), fs.readFileSync(path).toString("base64"));
-    }
-
     function recordActivity(path, value, callback) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
@@ -84,10 +56,12 @@ startStopDaemon(function() {
         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
-            // wait = true;
-            activity.set("enteredAt", now.toLocaleString());
+            activity.set("date", now);
+            activity.set("enteredTime", now.toTimeString());
+            activity.set("enteredDate", now.toDateString());
             activity.set("value", value);
             activity.set("photo", file);
+            activity.set("photoUrl", file.url());
             activity.save();
         });
     }
