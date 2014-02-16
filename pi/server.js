@@ -28,7 +28,7 @@ startStopDaemon(function() {
 
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
-	camera.start();
+    camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
             "Content-Type": "text/plain"
@@ -55,19 +55,19 @@ startStopDaemon(function() {
         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
-			console.log("saving activity to parse")
+	    console.log("saving activity to parse")
             activity.set("enteredAt", now);
             activity.set("value", value);
             activity.set("photo", file);
             activity.set("photoUrl", file.url());
             return activity;
         }).then(function(activity){
-        	activity.save().then(function(obj){
-        		console.log("activity saved")
-        		return obj;
-        	});
+            activity.save().then(function(obj){
+        	console.log("activity saved")
+        	return obj;
+            });
         }).then(function() {
-        	return 0;
+            return 0;
         });
     }
 
