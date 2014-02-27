@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dip"
+            android:background="@color/dark_grey" />
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="0dp"
+            android:paddingTop="10dp" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:paddingLeft="20dp"
+                android:text="@string/hello"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/black_grey" />
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:paddingLeft="20dp"
+                android:text="@string/hello"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/black_grey" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dip"
+            android:background="@color/dark_grey" />
+    </LinearLayout>
+
+</ScrollView>
