@@ -18,6 +18,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.PushService;
 import com.rsaspi.R;
 import com.rsaspi.controllers.ActivityAdapter;
 import com.rsaspi.models.RoomActivity;
@@ -34,7 +35,7 @@ public class MainActivity extends Activity implements OnItemClickListener{
 
 		ParseAnalytics.trackAppOpened(getIntent());
 		ParseObject.registerSubclass(RoomActivity.class);
-		
+		PushService.setDefaultPushCallback(this, MainActivity.class);
 		adapter = new ActivityAdapter(this, new ArrayList<RoomActivity>());
 		listView = (ListView) findViewById(R.id.activity_list);
 		listView.setAdapter(adapter);
