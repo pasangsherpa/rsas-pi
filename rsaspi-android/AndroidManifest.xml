@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="4"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -38,8 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rsaspi.views.DetailActivity"
-            android:label="@string/hello" >
+            android:name="com.rsaspi.views.DetailActivity">
         </activity>
 
         <service android:name="com.parse.PushService" />

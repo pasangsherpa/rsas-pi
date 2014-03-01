@@ -8,44 +8,95 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="20dp" >
+        android:paddingTop="40dp" >
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="0.4dip"
             android:background="@color/dark_grey" />
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="0dp"
+            android:paddingBottom="10dp"
             android:paddingTop="10dp" >
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="0.5"
+                android:layout_weight="0.3"
                 android:paddingLeft="20dp"
-                android:text="@string/hello"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black_grey" />
+                android:text="@string/date"
+                android:textColor="@color/black_grey"
+                android:textSize="15sp" />
+
             <TextView
+                android:id="@+id/date"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="0.5"
+                android:layout_weight="0.7"
                 android:paddingLeft="20dp"
                 android:text="@string/hello"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black_grey" />
+                android:textColor="@color/black_grey"
+                android:textSize="15sp" />
         </LinearLayout>
-        
+
         <View
             android:layout_width="fill_parent"
             android:layout_height="0.4dip"
             android:background="@color/dark_grey" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.3"
+                android:paddingLeft="20dp"
+                android:text="@string/time"
+                android:textColor="@color/black_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.7"
+                android:paddingLeft="20dp"
+                android:text="@string/hello"
+                android:textColor="@color/black_grey"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dip"
+            android:background="@color/dark_grey" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp" >
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_launcher" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

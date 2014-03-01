@@ -21,10 +21,10 @@
                     var date = new Date(activities[i].get('enteredAt'))
                         enteredTime = date.toLocaleTimeString(),
                         enteredDate = date.toLocaleDateString() %>
-                    <tr>
+                    <tr id="<%= activities[i].id%>" style="cursor:pointer">
                       <td><%= enteredDate %></td>
                       <td><%= enteredTime %></td>
-                      <td><span class="glyphicon glyphicon-picture" id="<%= activities[i].id%>" style="cursor:pointer"></span></td>
+                      <td><span class="glyphicon glyphicon-picture"></span></td>
                     </tr>
                     <tr style="cursor:default">
                       <td colspan="3"><img src="<%= activities[i].get('photoUrl')%>" id="img-<%= activities[i].id%>" class="img-responsive hidden" alt="image"></td>
