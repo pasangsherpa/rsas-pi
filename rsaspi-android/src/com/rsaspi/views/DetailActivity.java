@@ -15,6 +15,7 @@ import com.rsaspi.R;
 
 public class DetailActivity extends Activity {
 
+	private TextView dayView;
 	private TextView dateView;
 	private TextView timeView;
 	private ImageView imageView;
@@ -27,13 +28,16 @@ public class DetailActivity extends Activity {
 			return;
 		}
 		// get data via the key
-		String date = extras.getString("date");
-		String time = extras.getString("time");
+		String day = extras.getString("day").trim();
+		String date = extras.getString("date").trim();
+		String time = extras.getString("time").trim();
 		byte[] bytes = extras.getByteArray("bytes");
 		Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 		imageView = (ImageView) findViewById(R.id.photo);
 
 		imageView.setImageBitmap(bmp);
+		dayView = (TextView) findViewById(R.id.day);
+		dayView.setText(day);
 		dateView = (TextView) findViewById(R.id.date);
 		dateView.setText(date);
 		timeView = (TextView) findViewById(R.id.time);

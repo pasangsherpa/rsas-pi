@@ -42,13 +42,15 @@ startStopDaemon(function() {
         if (value > 500) {        
            	//camera.on("read", function(err, timestamp, path) {
                 //console.log("image captured with path: " + path + " @ : " + timestamp);
-                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value);
+                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function(){
+                    console.log("activity saved")
+                });
             //});
         }
         console.log("value: " + value);
     }, 500);
 	
-    function recordActivity(path, value) {
+    function recordActivity(path, value, callback) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
             image, fileData, now = new Date();
@@ -60,14 +62,8 @@ startStopDaemon(function() {
             activity.set("value", value);
             activity.set("photo", file);
             activity.set("photoUrl", file.url());
-            return activity;
-        }).then(function(activity){
-            activity.save().then(function(obj){
-        	console.log("activity saved")
-        	return obj;
-            });
-        }).then(function() {
-            return 0;
+            activity.save();
+            callback(activity);
         });
     }
 

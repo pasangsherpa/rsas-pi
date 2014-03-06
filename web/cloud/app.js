@@ -21,7 +21,6 @@ app.get('/', function(req, res) {
         activityQuery.descending("enteredAt");
     activityQuery.find({
         success: function(results) {
-            console.log("Successfully retrieved " + results.length + " activities.");
             res.render('content', {
                 activities: results
             });

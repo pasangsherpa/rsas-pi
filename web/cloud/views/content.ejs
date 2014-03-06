@@ -18,9 +18,14 @@
               </thead>
               <tbody>
                 <% for(var i=0; i < activities.length; i++) {
-                    var date = new Date(activities[i].get('enteredAt'))
-                        enteredTime = date.toLocaleTimeString(),
-                        enteredDate = date.toLocaleDateString() %>
+                    var date = new Date(activities[i].get('enteredAt').toString()),
+                        hours = date.getHours();
+                        date.setHours(hours - 8);
+                    var enteredTime = date.toLocaleTimeString(),
+                        enteredHour = enteredTime.substring(0,2),
+                        enteredTime = enteredHour > 12 ? enteredHour - 12 + enteredTime.substring(2, enteredTime.length) + " PM": enteredTime + " AM",
+                        enteredDate = date.toLocaleDateString(),
+                        enteredLocalTime = new Date %>
                     <tr id="<%= activities[i].id%>" style="cursor:pointer">
                       <td><%= enteredDate %></td>
                       <td><%= enteredTime %></td>

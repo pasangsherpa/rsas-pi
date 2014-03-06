@@ -4,19 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -79,6 +74,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 			public void done(byte[] bytes, ParseException e) {
 				Intent detail = new Intent(getApplicationContext(),
 						DetailActivity.class);
+				detail.putExtra("day", view.getTag(R.string.day).toString());
 				detail.putExtra("date", view.getTag(R.string.date).toString());
 				detail.putExtra("time", view.getTag(R.string.time).toString());
 				detail.putExtra("bytes", bytes);
