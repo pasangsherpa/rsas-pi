@@ -15,7 +15,10 @@ var http = require('http'),
     startStopDaemon = require('start-stop-daemon'),
     BASE = 123,
     CHANNEL = 0,
-    wait,
+    frontLeftPin = 0,
+    frontRightPin = 1,
+    backLeftPin = 2,
+    backRightPin = 3,
     camera = new RaspiCam({
         mode: "photo",
         output: "./photo/img.jpg",
@@ -28,6 +31,10 @@ startStopDaemon(function() {
 
     wpi.mcp3004Setup(BASE, CHANNEL);
     wpi.setup('sys');
+    wpi.pinMode(frontLeftPin, wpi.INPUT);
+    wpi.pinMode(frontRightPin, wpi.INPUT);
+    wpi.pinMode(backLeftPin, wpi.INPUT);
+    wpi.pinMode(backRightPin, wpi.INPUT);
     camera.start();
     http.createServer(function(req, resp) {
         resp.writeHead(200, {
@@ -38,18 +45,32 @@ startStopDaemon(function() {
     }).listen(8000);
 
     setInterval(function() {
-        var value = wpi.analogRead(BASE);
-        if (value > 500) {        
-           	//camera.on("read", function(err, timestamp, path) {
-                //console.log("image captured with path: " + path + " @ : " + timestamp);
-                recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function(){
-                    console.log("activity saved")
-                });
-            //});
+        var value = wpi.analogRead(BASE),
+            frontLeftValue = wpi.digitalRead(frontLeftPin),
+            frontRightValue = wpi.digitalRead(frontRightPin),
+            backLeftValue = wpi.digitalRead(backLeftPin),
+            backRightValue = wpi.digitalRead(backRightPin);
+
+        console.log("frontLeftValue: " + frontLeftValue)
+        console.log("frontRightValue: " + frontRightValue)
+        console.log("backLeftValue: " + backLeftValue)
+        console.log("backRightValue: " + backRightValue)
+
+        if (frontLeftValue || frontRightValue || backLeftValue || backRightValue) {
+            console.log("Someone is in the room")
+            // recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {
+            //     console.log("activity saved")
+            // });
         }
+
+        // if (value > 500) {
+        //     recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {
+        //         console.log("activity saved")
+        //     });
+        // }
         console.log("value: " + value);
     }, 500);
-	
+
     function recordActivity(path, value, callback) {
         var Activity = Parse.Object.extend("Activity"),
             activity = new Activity(),
@@ -57,7 +78,7 @@ startStopDaemon(function() {
         filedata = Array.prototype.slice.call(new Buffer(fs.readFileSync('/home/pi/projects/rsas-pi/pi/photo/img.jpg')), 0)
         image = new Parse.File("image.jpg", filedata);
         image.save().then(function(file) {
-	    console.log("saving activity to parse")
+            console.log("saving activity to parse")
             activity.set("enteredAt", now);
             activity.set("value", value);
             activity.set("photo", file);
