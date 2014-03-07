@@ -20,17 +20,18 @@ var http = require('http'),
     backLeftPin = 2,
     backRightPin = 3,
     camera = new RaspiCam({
-        mode: "photo",
+        mode: "timelapse",
         output: "./photo/img.jpg",
-        encoding: "jpg",
-        timeout: 0
+        encoding:"jpg",
+        timelapse: 200,
+        timeout: 86400000
     });
 
 startStopDaemon(function() {
     Parse.initialize("GabAeJSBADI5LJzFSdTzBX7Ru4Ns2Kq2UMhtXaI8", "xwaDV6YKCz2oKfV6tw1jKeceTSXRbLH0mfgY2nP9");
 
     wpi.mcp3004Setup(BASE, CHANNEL);
-    wpi.setup('sys');
+    wpi.setup();
     wpi.pinMode(frontLeftPin, wpi.INPUT);
     wpi.pinMode(frontRightPin, wpi.INPUT);
     wpi.pinMode(backLeftPin, wpi.INPUT);
@@ -45,30 +46,31 @@ startStopDaemon(function() {
     }).listen(8000);
 
     setInterval(function() {
-        var value = wpi.analogRead(BASE),
+        var left = wpi.analogRead(BASE),
             frontLeftValue = wpi.digitalRead(frontLeftPin),
             frontRightValue = wpi.digitalRead(frontRightPin),
             backLeftValue = wpi.digitalRead(backLeftPin),
             backRightValue = wpi.digitalRead(backRightPin);
 
-        console.log("frontLeftValue: " + frontLeftValue)
-        console.log("frontRightValue: " + frontRightValue)
-        console.log("backLeftValue: " + backLeftValue)
-        console.log("backRightValue: " + backRightValue)
+        //console.log("frontLeftValue: " + frontLeftValue)
+        //console.log("frontRightValue: " + frontRightValue)
+        //console.log("backLeftValue: " + backLeftValue)
+        //console.log("backRightValue: " + backRightValue)
 
-        if (frontLeftValue || frontRightValue || backLeftValue || backRightValue) {
-            console.log("Someone is in the room")
-            // recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {
-            //     console.log("activity saved")
-            // });
-        }
-
-        // if (value > 500) {
-        //     recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {
-        //         console.log("activity saved")
-        //     });
-        // }
-        console.log("value: " + value);
+        //if (frontLeftValue || frontRightValue || backLeftValue || backRightValue) {
+            //console.log("Someone is in the room")
+             //recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', value, function() {
+             //    console.log("activity saved")
+             //});
+        //}
+		console.log("Left Analog: " + left + "	|	Right Digital: " + frontRightValue);
+        if (left > 320 && frontRightValue) {
+        
+             recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', left, function() {
+                 console.log("activity saved")
+             });
+         }
+        
     }, 500);
 
     function recordActivity(path, value, callback) {
