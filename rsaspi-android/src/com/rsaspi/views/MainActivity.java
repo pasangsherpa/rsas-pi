@@ -24,6 +24,13 @@ import com.rsaspi.R;
 import com.rsaspi.controllers.ActivityAdapter;
 import com.rsaspi.models.RoomActivity;
 
+/**
+ *  @author - Pasang Sherpa
+ *  @author - Aaron Nelson
+ *  @author - Jonathan Forbes
+ *  @author - Takatoshi Tomoyose
+ */
+
 public class MainActivity extends Activity implements OnItemClickListener {
 
 	private ActivityAdapter adapter;

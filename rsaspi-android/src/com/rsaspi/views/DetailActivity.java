@@ -13,6 +13,13 @@ import android.widget.TextView;
 
 import com.rsaspi.R;
 
+/**
+ *  @author - Pasang Sherpa
+ *  @author - Aaron Nelson
+ *  @author - Jonathan Forbes
+ *  @author - Takatoshi Tomoyose
+ */
+
 public class DetailActivity extends Activity {
 
 	private TextView dayView;

@@ -14,6 +14,13 @@ import android.widget.TextView;
 import com.rsaspi.R;
 import com.rsaspi.models.RoomActivity;
 
+/**
+ *  @author - Pasang Sherpa
+ *  @author - Aaron Nelson
+ *  @author - Jonathan Forbes
+ *  @author - Takatoshi Tomoyose
+ */
+
 public class ActivityAdapter extends ArrayAdapter<RoomActivity> {
 	private Context context;
 	private List<RoomActivity> activities;
