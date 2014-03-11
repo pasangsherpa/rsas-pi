@@ -63,7 +63,7 @@ startStopDaemon(function() {
              //    console.log("activity saved")
              //});
         //}
-		console.log("Left Analog: " + left + "	|	Right Digital: " + frontRightValue);
+        console.log("Left Analog: " + left + "	|	Right Digital: " + frontRightValue);
         if (left > 320 && frontRightValue) {
         
              recordActivity('/home/pi/projects/rsas-pi/pi/photo/img.jpg', left, function() {

@@ -1,3 +1,10 @@
+/**
+ *  @author - Pasang Sherpa
+ *  @author - Aaron Nelson
+ *  @author - Jonathan Forbes
+ *  @author - Takatoshi Tomoyose
+ */
+ 
 var express = require('express'),
     moment = require('moment'),
     expressLayouts = require('cloud/express-layouts'),

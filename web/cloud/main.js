@@ -1,3 +1,10 @@
+/**
+ *  @author - Pasang Sherpa
+ *  @author - Aaron Nelson
+ *  @author - Jonathan Forbes
+ *  @author - Takatoshi Tomoyose
+ */
+
 require('cloud/app');
 
 Parse.Cloud.afterSave("Activity", function(request, response) {
@@ -7,8 +14,6 @@ Parse.Cloud.afterSave("Activity", function(request, response) {
         data: {
             alert: "Someone is in the room. Wanna see the face?",
             title: "Room Security Alert System"
-            // action: "com.rsaspi.UPDATE_STATUS",
-            // customdata: "Someone is in the room. Do you wanna see the face?"
         }
     }, {
         success: function() {
